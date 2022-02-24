@@ -101,9 +101,9 @@ function(input, output, session) {
                                               bsPopover(id = "b7", title="", content = "How many hours each day will you have your lights on?", placement="right", trigger="hover",options = list(container = "body"))),
                                           div(title="Monthly Demand Charge Price",
                                               textInput(inputId ="New_GHD_demand_charge_price",
-                                                        label = p("Monthly Demand Charge Price",
+                                                        label = p("Monthly Demand Charge Price ($/kW)",
                                                                   bsButton("b8", label = "", icon = icon("question"), style = "info", size = "extra-small"), style = "width:200px")),
-                                              bsPopover(id = "b8", title="", content = "Typically, between 1.50 and 13.50 $/kW. Use numbers only. Commercial customers typically pay a demand charge as part of the elecricity bill, based on their peak power usage. The price for this charge is normally shown on the power bill as $/kW/month", placement="right", trigger="hover",options = list(container = "body")))
+                                              bsPopover(id = "b8", title="", content = "This charge may range from $5 to over $15/kW. Use numbers only. Commercial customers typically pay a demand charge as part of the elecricity bill, based on their peak power usage. The price for this charge is typically shown on the power bill as $/kW", placement="right", trigger="hover",options = list(container = "body")))
                                           
                           ),#bracket column 1
                           #Gear icon for customize % of lighting area by month
@@ -807,6 +807,7 @@ function(input, output, session) {
       
       # Create a plot that visualized the natural sunlight that enters the greenhouse after accounting for transmission for each day, and create an intercept representing the target DLI
       DLI_table$Natural_DLI_Reached <- DLI_table$Natural_DLI >= target 
+      #DLI_table$Month <- format(as.Date(df$Date), "%d-%m")
       # Visualize the data
       output$CC_naturalDLI <- renderPlot({
         ggplot(DLI_table,aes(Date,Natural_DLI)) +
@@ -815,7 +816,7 @@ function(input, output, session) {
           labs(title = paste0("Days at or below a DLI of ", target),
                caption = paste0("Red line indicates the target DLI of ",target, "(mol/m2/d)")) +
           theme(plot.caption = element_text(size = 12)) +
-          ylab("Sunlight DLI (mol/m2/d)") + xlab("Date")
+          ylab("Sunlight DLI (mol/m2/d)") + xlab("Date") + scale_x_date(name = "Date", date_breaks = '1 month', date_labels = '%b')
       })
       
       # Create a plot to visualize the amount of supplemental light needed each day where the intercept represents the DLI capacity needed to cover X percent of days
@@ -843,7 +844,8 @@ function(input, output, session) {
                               days_reached_percent, "% of the year"),
                caption = paste0("Red line indicates the maximum DLI that can be provided by the system, which is ",round(DLI_capability,2), "(mol/m2/d)")) +
           theme(plot.caption = element_text(size = 12)) +
-          ylab("Supplemental DLI needed (mol/m2/d)") + xlab("Date")
+          ylab("Supplemental DLI needed (mol/m2/d)") + xlab("Date") + scale_x_date(name = "Date", date_breaks = '1 month', date_labels = '%b')
+          
       })
       
       # Output the percent of days, # of days, and DLI capacity as a valueBox for users to see
