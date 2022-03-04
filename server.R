@@ -165,7 +165,7 @@ function(input, output, session) {
                               )
                             )
                             , fluidRow(column(6,
-                                              h4("Sunlight"),
+                                              h4("Sunlight (accounting for transmission)"),
                                               plotOutput({"CC_naturalDLI"})),
                                        column(6,
                                               h4("Supplemental Light"),
